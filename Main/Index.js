@@ -1,6 +1,7 @@
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const generateTeam = require('./src/makeHTML');
 const inquirer = require('inquirer');
 const path = require('path');
 const fs = require('fs');
@@ -8,24 +9,147 @@ const fs = require('fs');
 const DIST_DIR = path.resolve(__dirname, 'dist');
 const distPath = path.join(DIST_DIR, 'team.html');
 
-const render = require('./src/page-template.js');
-
 const teamMembers = [];
 
 
 // function for creating manager - inquirer questions
-  // take those questions and create a new Manager with the user provided answers
-  // push that new Manager to the team members array
+function createManager(){
+  inquirer
+    .prompt([
+      {
+          type: 'input',
+          message: 'Name: ',
+          name: 'name'
+      },
+      {
+          type: 'input',
+          message: 'ID: ',
+          name: 'id'
+      },
+      {
+          type: 'input',
+          message: 'Email: ',
+          name: 'email'
+      },
+      {
+          type: 'input',
+          message: 'Office number: ',
+          name: 'officeNumber'
+      }
+    ])
+    .then((data) => {
+      var manager = new Manager(data.name,data.id,data.email,data.officeNumber)
+      teamMembers.push(manager);
+      createTeam();
+    }
 
-  // follow the same pattern for each type of employee
-  // build a function for them that uses inquirer
+    )
+}
 
+function createTeam(){
 
-// STRUCTURING IT
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        message: 'Add another member?',
+        choices: [  "Engineer",
+                    "Intern",
+                    "Finish Building Team"],
+        name: 'next'
+      }
+    ])
+    .then((data) =>{
+      console.log(data.next);
+      switch (data.next) {
+        case "Engineer":
+          createEngineer();
+          break;
 
-// start with manager function, since every team needs a manager
-// at the end of manager function, call a createTeam function
+        case "Intern":
+          createIntern();
+          break;
 
-// this function would simply ask the user which type of employee they would like to add, based on their choice, run the correesponding function
+        case "Finish Building Team":
+          createHTML();
+          break;
 
-// at the end, use fs to write file while sending the team array over to the function you brought in from page-template.js
+        default:
+          break;
+      }
+    })
+}
+
+function createIntern(){
+  inquirer
+    .prompt([
+      {
+          type: 'input',
+          message: 'Name: ',
+          name: 'name'
+      },
+      {
+          type: 'input',
+          message: 'ID: ',
+          name: 'id'
+      },
+      {
+          type: 'input',
+          message: 'Email: ',
+          name: 'email'
+      },
+      {
+          type: 'input',
+          message: 'School: ',
+          name: 'school'
+      }
+    ])
+    .then((data) => {
+      var intern = new Intern(data.name,data.id,data.email,data.school)
+      teamMembers.push(intern);
+      createTeam();
+    }
+
+    )
+}
+
+function createEngineer(){
+  inquirer
+    .prompt([
+      {
+          type: 'input',
+          message: 'Name: ',
+          name: 'name'
+      },
+      {
+          type: 'input',
+          message: 'ID: ',
+          name: 'id'
+      },
+      {
+          type: 'input',
+          message: 'Email: ',
+          name: 'email'
+      },
+      {
+          type: 'input',
+          message: 'GitHub: ',
+          name: 'github'
+      }
+    ])
+    .then((data) => {
+      var engineer = new Engineer(data.name,data.id,data.email,data.github)
+      teamMembers.push(engineer);
+      createTeam();
+    }
+
+    )
+}
+
+function createHTML(){
+  console.log(teamMembers);
+  fs.writeFile(distPath, generateTeam(teamMembers), (err) =>
+  err ? console.error(err) : console.log('file successfully created')
+)}
+
+createManager();

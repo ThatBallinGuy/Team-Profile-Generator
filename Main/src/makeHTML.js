@@ -1,5 +1,6 @@
-const generateTeam = team => {
-
+const generateTeam = data => {
+    var html = `Testing Testing 123`;
+    
     // create the manager html
     const generateManager = manager => {
         return `
@@ -22,8 +23,7 @@ const generateTeam = team => {
     };
 
     // use the team array to generate pieces of html based on the employee role
+    return html;
 }
 
-module.exports = team => {
-    // template literal - html body that calls the generate team function
-}
+module.exports = generateTeam;
