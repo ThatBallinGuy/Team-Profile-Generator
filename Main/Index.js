@@ -71,7 +71,7 @@ function createTeam(){
           break;
 
         case "Finish Building Team":
-          createHTML();
+          createDeliverables();
           break;
 
         default:
@@ -146,10 +146,14 @@ function createEngineer(){
     )
 }
 
-function createHTML(){
+function createDeliverables(){
   console.log(teamMembers);
   fs.writeFile(distPath, generateTeam(teamMembers), (err) =>
-  err ? console.error(err) : console.log('file successfully created')
-)}
+  err ? console.error(err) : console.log('HTML file successfully created'))
+
+  fs.writeFile(distPath, generateCSS(), (err) =>
+  err ? console.error(err) : console.log('CSS file successfully created'))
+
+}
 
 createManager();
