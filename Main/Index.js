@@ -2,15 +2,16 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const generateTeam = require('./src/makeHTML');
+const generateCSS = require('./src/makeCSS');
 const inquirer = require('inquirer');
 const path = require('path');
 const fs = require('fs');
 
 const DIST_DIR = path.resolve(__dirname, 'dist');
-const distPath = path.join(DIST_DIR, 'team.html');
+const distPath = path.join(DIST_DIR, 'index.html');
+const distPathCSS = path.join(DIST_DIR, 'style.css');
 
 const teamMembers = [];
-
 
 // function for creating manager - inquirer questions
 function createManager(){
@@ -151,7 +152,7 @@ function createDeliverables(){
   fs.writeFile(distPath, generateTeam(teamMembers), (err) =>
   err ? console.error(err) : console.log('HTML file successfully created'))
 
-  fs.writeFile(distPath, generateCSS(), (err) =>
+  fs.writeFile(distPathCSS, generateCSS(), (err) =>
   err ? console.error(err) : console.log('CSS file successfully created'))
 
 }
